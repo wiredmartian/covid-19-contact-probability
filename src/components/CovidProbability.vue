@@ -28,11 +28,35 @@
             </div>
         </div>
         <div class="row">
-            <div class="col m6 s12">
+            <div class="col s12">
                 <h4>Covid-19 probability </h4>
                 <p class="blue-grey-text">{{ probability }}</p>
                 <p class="blue-grey-text">Your chances of getting it are ... </p>
             </div>
+        </div>
+        <div class="row">
+            <h4>Timeline</h4>
+            <table class="striped">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Active</th>
+                    <th>New Cases</th>
+                    <th>Recovered</th>
+                    <th>Deaths</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr v-for="item in history">
+                    <td>{{ formatDate(item.time) }}</td>
+                    <td>{{ item.cases.active }}</td>
+                    <td>{{ item.cases.new || 0 }}</td>
+                    <td>{{ item.cases.recovered }}</td>
+                    <td>{{ item.deaths.total }}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
@@ -59,16 +83,6 @@
             this.getCountries();
         },
         methods: {
-            async getCountryHistory () {
-                try {
-                    const result = await this.$http.get(`/history?country=${this.country}`) as AxiosResponse;
-                    if (result.data.errors.length === 0) {
-                        this.history = result.data.response as HistorySchema[];
-                    }
-                } catch (e) {
-                    console.error(e);
-                }
-            },
             async getCountries () {
                 try {
                     const res = await this.$http.get('/countries') as AxiosResponse;
@@ -90,6 +104,17 @@
                         await this.getProvinces();
                         (window as any).M.FormSelect.init(document.querySelectorAll("select"));
                     }
+                    await this.getCountryHistory();
+                } catch (e) {
+                    console.error(e);
+                }
+            },
+            async getCountryHistory () {
+                try {
+                    const result = await this.$http.get(`/history?country=${this.country}`) as AxiosResponse;
+                    if (result.data.errors.length === 0) {
+                        this.history = result.data.response as HistorySchema[];
+                    }
                 } catch (e) {
                     console.error(e);
                 }
@@ -105,10 +130,16 @@
                     const activeCases = parseInt(this.statistics.cases.active);
                     const totalPopulation = parseInt(this.population);
                     this.probability = this.calculateProbability(activeCases, totalPopulation);
+                } else {
+                    this.provinces = [];
                 }
             },
             calculateProbability (interest: number, total: number) {
                 return (interest/total);
+            },
+            formatDate (date: string) {
+                let incident = new Date(date);
+                return incident.toUTCString();
             }
         }
     })
