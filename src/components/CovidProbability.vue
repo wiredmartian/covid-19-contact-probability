@@ -11,8 +11,8 @@
         </div>
         <div class="row" v-if="provinces.length > 1">
             <div class="input-field col m6 s12 offset-m3">
-                <select id="state" v-model="province" @change="getStatsForCountry">
-                    <option v-for="item in provinces" :value="item.name">{{ item.name }}</option>
+                <select id="state" v-model="province" @change="getProvinceStats">
+                    <option v-for="item in provinces" :value="item.population">{{ item.name }}</option>
                 </select>
                 <label for="state">Choose your state</label>
             </div>
@@ -118,6 +118,9 @@
                 } catch (e) {
                     console.error(e);
                 }
+            },
+            getProvinceStats () {
+                this.probability = this.calculateProbability(1170, this.province);
             },
             async getProvinces() {
                 /** call for get a country states
