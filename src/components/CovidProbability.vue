@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="row">
-            <h4>Timeline</h4>
+            <h4>{{ country }} Timeline</h4>
             <table class="striped">
                 <thead>
                 <tr>
