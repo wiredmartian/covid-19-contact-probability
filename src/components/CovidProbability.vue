@@ -23,7 +23,7 @@
 
         <div class="row">
             <div class="col s12" v-if="probability">
-                <h4>Covid-19 probability </h4>
+                <h4>Your probability </h4>
                 <p class="blue-grey-text flow-text">{{ percentage }}%</p>
                 <span class="grey-text">{{ probability }}</span>
                 <p class="blue-grey-text">Your chances of coming in contact with an infected person in {{ country }}.</p>
@@ -153,6 +153,7 @@
             },
             async getStatsForCountry() {
                 try {
+                    this.probability = null;
                     const stats = await this.$http.get(`statistics?country=${this.country}`) as AxiosResponse;
                     if (stats.data.errors.length === 0) {
                         this.statistics = stats.data.response[0] as StatsSchema;
