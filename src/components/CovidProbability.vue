@@ -66,7 +66,23 @@
             </div>
         </div>
         <div class="row">
+            <h3>Growth of active cases</h3>
             <div id="chart"></div>
+            <div class="input-field col m6 s12 offset-m3" v-show="history.length > 0">
+                <select id="_domain" v-model="domainAdjust" @change="adjustDomainValue">
+                    <option value="200">200</option>
+                    <option value="400">400</option>
+                    <option value="600">600</option>
+                    <option value="800">800</option>
+                    <option value="1000">1000</option>
+                    <option value="1200">1200</option>
+                    <option value="1400">1400</option>
+                    <option value="1600">1600</option>
+                    <option value="1800">1800</option>
+                    <option value="2000">2000</option>
+                </select>
+                <label for="_domain">Adjust x-axis</label>
+            </div>
         </div>
         <div class="row">
             <h4>{{ country }} Timeline</h4>
@@ -109,6 +125,7 @@
                 country: null,
                 province: null,
                 population: null,
+                domainAdjust: 2000,
                 countries: [],
                 provinces: [],
                 history: [],
@@ -183,11 +200,14 @@
                 let incident = new Date(date);
                 return incident.toUTCString();
             },
+            adjustDomainValue() {
+                this.renderGraph();
+            },
             renderGraph() {
                 document.querySelector('#chart')!.innerHTML = "";
                 let margin = {top: 10, right: 30, bottom: 30, left: 60},
-                    width = 800 - margin.left - margin.right,
-                    height = 400 - margin.top - margin.bottom;
+                    width = 900 - margin.left - margin.right,
+                    height = 600 - margin.top - margin.bottom;
 
                 let svg = d3.select('#chart')
                     .append('svg')
@@ -198,39 +218,40 @@
                         "translate(" + margin.left + "," + margin.top + ")");
 
 
-                const data = this.history.map((record: any) => {
-                    return { date: d3.timeParse("%Y-%m-%d")(record.day), value: record.cases.active }
+                let data = this.history.map((record: any) => {
+                    return { date: record.day, value: record.cases.total }
                 });
+                // reverse the date to ascending
+                data = data.reverse();
                 // Add X axis --> it is a date format
-                const x = d3.scaleTime().domain(d3.extent(data,  (d: any) => {
-                    return d.date;
-                })).range([0, width]);
+                const x = d3.scaleBand()
+                    .range([ 0, width ])
+                    .domain(data.map(function(d) { return d.date; }))
+                    .padding(0.2);
                 svg.append("g")
                     .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x));
+                    .call(d3.axisBottom(x))
+                    .selectAll("text")
+                    .attr("transform", "translate(-10,0)rotate(-45)")
+                    .style("text-anchor", "end");
 
                 // Add Y axis
                 const y = d3.scaleLinear()
-                    .domain([0, d3.max(data,  (d: any) => {
-                        return +d.value;
-                    })]).range([height, 0]);
+                    .domain([0, this.domainAdjust])
+                    .range([ height, 0]);
                 svg.append("g")
                     .call(d3.axisLeft(y));
 
                 // Add the line
-                svg.append("path")
-                    .datum(data)
-                    .attr("fill", "none")
-                    .attr("stroke", "steelblue")
-                    .attr("stroke-width", 1.5)
-                    .attr("d", d3.line()
-                        .x((d) => {
-                            return x(d.date)
-                        })
-                        .y((d) => {
-                            return y(d.value)
-                        })
-                    );
+                svg.selectAll("mybar")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("x", function(d) { return x(d.date); })
+                    .attr("y", function(d) { return y(d.value); })
+                    .attr("width", x.bandwidth())
+                    .attr("height", function(d) { return height - y(d.value); })
+                    .attr("fill", "#69b3a2");
             }
         }
     });
