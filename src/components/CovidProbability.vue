@@ -230,10 +230,9 @@
                 });
                 // reverse the date to ascending
                 data = data.reverse();
-                // Add X axis --> it is a date format
                 const x = d3.scaleBand()
                     .range([ 0, width ])
-                    .domain(data.map(function(d) { return d.date; }))
+                    .domain(data.map((d: any) => { return d.date; }))
                     .padding(0.2);
                 svg.append("g")
                     .attr("transform", "translate(0," + height + ")")
