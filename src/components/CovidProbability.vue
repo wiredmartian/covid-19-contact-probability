@@ -22,10 +22,11 @@
         </div>
 
         <div class="row">
-            <div class="col s12">
+            <div class="col s12" v-if="probability">
                 <h4>Covid-19 probability </h4>
-                <p class="blue-grey-text">{{ probability }}</p>
-                <p class="blue-grey-text">Your chances of getting it are ... </p>
+                <p class="blue-grey-text flow-text">{{ percentage }}%</p>
+                <span class="grey-text">{{ probability }}</span>
+                <p class="blue-grey-text">Your chances of coming in contact with an infected person in {{ country }}.</p>
             </div>
         </div>
         <div class="row">
@@ -65,6 +66,9 @@
             </div>
         </div>
         <div class="row">
+            <div id="chart"></div>
+        </div>
+        <div class="row">
             <h4>{{ country }} Timeline</h4>
             <table class="striped">
                 <thead>
@@ -96,10 +100,12 @@
     import {HistorySchema, StatsSchema} from '@/schema/schemas';
     import {SouthAfricanData} from '@/schema/south-african-data';
     import {AxiosResponse} from "axios";
+    import * as d3 from "d3"
     export default Vue.extend({
         data () {
             return {
                 probability: null,
+                percentage: null,
                 country: null,
                 province: null,
                 population: null,
@@ -144,6 +150,7 @@
                     const result = await this.$http.get(`/history?country=${this.country}`) as AxiosResponse;
                     if (result.data.errors.length === 0) {
                         this.history = result.data.response as HistorySchema[];
+                        this.renderGraph();
                     }
                 } catch (e) {
                     console.error(e);
@@ -151,6 +158,7 @@
             },
             getProvinceStats () {
                 this.probability = this.calculateProbability(1170, this.province);
+                this.percentage = (this.probability * 100).toFixed(6);
             },
             async getProvinces() {
                 /** call for get a country states
@@ -163,6 +171,7 @@
                     const activeCases = parseInt(this.statistics.cases.active);
                     const totalPopulation = parseInt(this.population);
                     this.probability = this.calculateProbability(activeCases, totalPopulation);
+                    this.percentage = (this.probability * 100).toFixed(6);
                 } else {
                     this.provinces = [];
                 }
@@ -173,9 +182,58 @@
             formatDate (date: string) {
                 let incident = new Date(date);
                 return incident.toUTCString();
+            },
+            renderGraph() {
+                document.querySelector('#chart')!.innerHTML = "";
+                let margin = {top: 10, right: 30, bottom: 30, left: 60},
+                    width = 800 - margin.left - margin.right,
+                    height = 400 - margin.top - margin.bottom;
+
+                let svg = d3.select('#chart')
+                    .append('svg')
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+
+
+                const data = this.history.map((record: any) => {
+                    return { date: d3.timeParse("%Y-%m-%d")(record.day), value: record.cases.active }
+                });
+                // Add X axis --> it is a date format
+                const x = d3.scaleTime().domain(d3.extent(data,  (d: any) => {
+                    return d.date;
+                })).range([0, width]);
+                svg.append("g")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x));
+
+                // Add Y axis
+                const y = d3.scaleLinear()
+                    .domain([0, d3.max(data,  (d: any) => {
+                        return +d.value;
+                    })]).range([height, 0]);
+                svg.append("g")
+                    .call(d3.axisLeft(y));
+
+                // Add the line
+                svg.append("path")
+                    .datum(data)
+                    .attr("fill", "none")
+                    .attr("stroke", "steelblue")
+                    .attr("stroke-width", 1.5)
+                    .attr("d", d3.line()
+                        .x((d) => {
+                            return x(d.date)
+                        })
+                        .y((d) => {
+                            return y(d.value)
+                        })
+                    );
             }
         }
-    })
+    });
 </script>
 
 <style lang="scss" scoped>
