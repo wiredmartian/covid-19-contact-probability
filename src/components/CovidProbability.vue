@@ -15,7 +15,7 @@
         <div class="row" v-if="provinces.length > 1">
             <div class="input-field col m6 s12 offset-m3">
                 <select id="state" v-model="province" @change="getProvinceStats">
-                    <option v-for="item in provinces" :value="item.population">{{ item.name }}</option>
+                    <option v-for="item in provinces" :value="item">{{ item.name }}</option>
                 </select>
                 <label for="state">Choose your state</label>
             </div>
@@ -177,8 +177,12 @@
                 }
             },
             getProvinceStats () {
-                this.probability = this.calculateProbability(1170, this.province);
+                /** unallocated cases in South Africa - 117
+                 * https://www.health24.com/Medical/Infectious-diseases/Coronavirus/coronavirus-in-sa-all-the-confirmed-cases-20200312
+                 * */
+                this.probability = this.calculateProbability(this.province.cases, this.province.population);
                 this.percentage = (this.probability * 100).toFixed(6);
+                this.province = this.province.population;
             },
             async getProvinces() {
                 /** call for get a country states
@@ -250,10 +254,10 @@
                     .data(data)
                     .enter()
                     .append("rect")
-                    .attr("x", function(d) { return x(d.date); })
-                    .attr("y", function(d) { return y(d.value); })
+                    .attr("x", (d: any) => { return x(d.date); })
+                    .attr("y", (d: any) => { return y(d.value); })
                     .attr("width", x.bandwidth())
-                    .attr("height", function(d) { return height - y(d.value); })
+                    .attr("height", (d: any) => { return height - y(d.value); })
                     .attr("fill", "#69b3a2");
             }
         }
