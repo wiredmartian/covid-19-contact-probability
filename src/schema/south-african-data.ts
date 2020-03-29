@@ -1,4 +1,4 @@
-/* south africa - from http://www.statssa.gov.za/ */
+/* south africa - from http://www.statssa.gov.za/publications/P0302/P03022019.pdf*/
 export const SouthAfricanData = {
     population: 58775022,
     provinces: [
