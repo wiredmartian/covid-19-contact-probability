@@ -143,9 +143,10 @@
                     const res = await this.$http.get('/countries') as AxiosResponse;
                     if (res.data.errors.length === 0) {
                         this.countries = res.data.response;
+                        /** bug in materialize select */
                         setTimeout(() => {
                             (window as any).M.FormSelect.init(document.querySelectorAll("select"));
-                        }, 1000)
+                        }, 500)
                     }
                 } catch (e) {
                     console.error(e);
