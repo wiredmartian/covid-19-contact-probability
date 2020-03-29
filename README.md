@@ -39,10 +39,16 @@ via their Rapid API https://rapidapi.com/api-sports/api/covid-193
 ... updated every 5 minutes ...
 
 ### South Africa population stats
-Provided by Stats SA (http://www.statssa.gov.za/)
+Provided by Stats SA (http://www.statssa.gov.za/?page_id=1854&PPN=P0302) 
 
-Also note: This is from 2016 census
+Official Stats release in 29 July 2019: http://www.statssa.gov.za/publications/P0302/P03022019.pdf
 
+
+### Provincial cases
+Taken (28/03/2020) from Health24 website (https://www.health24.com/Medical/Infectious-diseases/Coronavirus/coronavirus-in-sa-all-the-confirmed-cases-20200312)
+
+
+These are NOT UPDATED, which present an opportunity for an API addressing this
 
 
 
