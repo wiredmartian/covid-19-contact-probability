@@ -41,7 +41,7 @@ via their Rapid API https://rapidapi.com/api-sports/api/covid-193
 ### South Africa population stats
 Provided by Stats SA (http://www.statssa.gov.za/?page_id=1854&PPN=P0302) 
 
-Official PDF Doc: http://www.statssa.gov.za/publications/P0302/P03022019.pdf
+Official Stats release in 29 July 2019: http://www.statssa.gov.za/publications/P0302/P03022019.pdf
 
 
 ### Provincial cases
