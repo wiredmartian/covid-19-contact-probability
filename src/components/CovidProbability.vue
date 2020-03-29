@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col m6 s12" v-if="statistics.cases">
+            <div class="col m12 s12" v-if="statistics.cases">
                 <ul class="collection with-header">
                     <li class="collection-header"><h4>Confirmed Cases</h4></li>
                     <li class="collection-item">
@@ -42,24 +42,17 @@
                     <li class="collection-item">
                         <div>Critical <div class="secondary-content">{{ statistics.cases.critical }}</div></div>
                     </li>
-                    <li class="collection-item">
-                        <div>Recovered <div class="secondary-content">{{ statistics.cases.recovered }}
-                        </div></div>
+                    <li class="collection-item alert-info">
+                        <div>Recovered <div class="secondary-content">{{ statistics.cases.recovered }}</div></div>
                     </li>
-                    <li class="collection-item">
+                    <li class="collection-item alert-danger">
                         <div>Total <div class="secondary-content">{{ statistics.cases.total }}</div></div>
                     </li>
-                </ul>
-                <p class="blue-grey-text">Last updated: {{ formatDate(statistics.time) }}</p>
-            </div>
-            <div class="col m6 s12" v-if="statistics.deaths">
-                <ul class="collection with-header">
-                    <li class="collection-header"><h4>Confirmed Deaths</h4></li>
                     <li class="collection-item">
-                        <div>New <div class="secondary-content">{{ statistics.deaths.new }}</div></div>
+                        <div>New Deaths <div class="secondary-content">{{ statistics.deaths.new }}</div></div>
                     </li>
-                    <li class="collection-item">
-                        <div>Total <div class="secondary-content">{{ statistics.deaths.total }}</div></div>
+                    <li class="collection-item alert-dark">
+                        <div>Total Deaths <div class="secondary-content">{{ statistics.deaths.total }}</div></div>
                     </li>
                 </ul>
                 <p class="blue-grey-text">Last updated: {{ formatDate(statistics.time) }}</p>
@@ -80,6 +73,15 @@
                     <option value="1600">1600</option>
                     <option value="1800">1800</option>
                     <option value="2000">2000</option>
+                    <option value="3000">3000</option>
+                    <option value="4000">4000</option>
+                    <option value="5000">5000</option>
+                    <option value="6000">6000</option>
+                    <option value="7000">7000</option>
+                    <option value="8000">8000</option>
+                    <option value="9000">9000</option>
+                    <option value="10000">10000</option>
+
                 </select>
                 <label for="_domain">Adjust x-axis</label>
             </div>
@@ -268,5 +270,25 @@
         li.collection-item {
             font-size: 20px;
         }
+    }
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da !important;
+        border-color: #f5c6cb;
+    }
+    .alert-warning {
+        color: #856404;
+        background-color: #fff3cd !important;
+        border-color: #ffeeba;
+    }
+    .alert-info {
+        color: #0c5460;
+        background-color: #d1ecf1 !important;
+        border-color: #bee5eb;
+    }
+    .alert-dark {
+        color: #1b1e21;
+        background-color: #d6d8d9 !important;
+        border-color: #c6c8ca;
     }
 </style>
