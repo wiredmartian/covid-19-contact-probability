@@ -43,6 +43,11 @@ Provided by Stats SA (http://www.statssa.gov.za/)
 
 Also note: This is from 2016 census
 
+### Provincial cases
+Taken (28/03/2020) from Health24 website (https://www.health24.com/Medical/Infectious-diseases/Coronavirus/coronavirus-in-sa-all-the-confirmed-cases-20200312)
+
+
+These are NOT UPDATED, which present an opportunity for an API addressing this
 
 
 
