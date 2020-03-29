@@ -1,5 +1,8 @@
 <template>
     <div class="container">
+        <div class="row">
+                <img alt="Vue logo" src="../assets/covid-virus.png">
+        </div>
         <h2>Covid-19 Contact Probability</h2>
         <div class="row">
             <div class="input-field col m6 s12 offset-m3">
@@ -17,21 +20,48 @@
                 <label for="state">Choose your state</label>
             </div>
         </div>
-        <div class="row">
-            <div class="col m6 s12">
-                <h4>Cases</h4>
-                <p class="blue-grey-text">{{ statistics.cases }}</p>
-            </div>
-            <div class="col m6 s12">
-                <h4>Deaths</h4>
-                <p class="blue-grey-text">{{ statistics.deaths }}</p>
-            </div>
-        </div>
+
         <div class="row">
             <div class="col s12">
                 <h4>Covid-19 probability </h4>
                 <p class="blue-grey-text">{{ probability }}</p>
                 <p class="blue-grey-text">Your chances of getting it are ... </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col m6 s12" v-if="statistics.cases">
+                <ul class="collection with-header">
+                    <li class="collection-header"><h4>Confirmed Cases</h4></li>
+                    <li class="collection-item">
+                        <div>New <div class="secondary-content">{{ statistics.cases.new }}</div></div>
+                    </li>
+                    <li class="collection-item">
+                        <div>Active <div class="secondary-content">{{ statistics.cases.active }}</div></div>
+                    </li>
+                    <li class="collection-item">
+                        <div>Critical <div class="secondary-content">{{ statistics.cases.critical }}</div></div>
+                    </li>
+                    <li class="collection-item">
+                        <div>Recovered <div class="secondary-content">{{ statistics.cases.recovered }}
+                        </div></div>
+                    </li>
+                    <li class="collection-item">
+                        <div>Total <div class="secondary-content">{{ statistics.cases.total }}</div></div>
+                    </li>
+                </ul>
+                <p class="blue-grey-text">Last updated: {{ formatDate(statistics.time) }}</p>
+            </div>
+            <div class="col m6 s12" v-if="statistics.deaths">
+                <ul class="collection with-header">
+                    <li class="collection-header"><h4>Confirmed Deaths</h4></li>
+                    <li class="collection-item">
+                        <div>New <div class="secondary-content">{{ statistics.deaths.new }}</div></div>
+                    </li>
+                    <li class="collection-item">
+                        <div>Total <div class="secondary-content">{{ statistics.deaths.total }}</div></div>
+                    </li>
+                </ul>
+                <p class="blue-grey-text">Last updated: {{ formatDate(statistics.time) }}</p>
             </div>
         </div>
         <div class="row">
@@ -148,6 +178,16 @@
     })
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+    img {
+        width: 60%;
+    }
+    .collection.with-header {
+        li {
+            text-align: justify;
+        }
+        li.collection-item {
+            font-size: 20px;
+        }
+    }
 </style>
