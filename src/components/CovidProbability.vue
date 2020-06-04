@@ -63,10 +63,6 @@
             <div id="chart"></div>
             <div class="input-field col m6 s12 offset-m3" v-show="history.length > 0">
                 <select id="_domain" v-model="domainAdjust" @change="adjustDomainValue">
-                    <option value="200">200</option>
-                    <option value="400">400</option>
-                    <option value="600">600</option>
-                    <option value="800">800</option>
                     <option value="1000">1000</option>
                     <option value="1200">1200</option>
                     <option value="1400">1400</option>
@@ -81,7 +77,12 @@
                     <option value="8000">8000</option>
                     <option value="9000">9000</option>
                     <option value="10000">10000</option>
-
+                    <option value="15000">15000</option>
+                    <option value="20000">20000</option>
+                    <option value="25000">25000</option>
+                    <option value="30000">30000</option>
+                    <option value="35000">35000</option>
+                    <option value="40000">40000</option>
                 </select>
                 <label for="_domain">Adjust x-axis</label>
             </div>
